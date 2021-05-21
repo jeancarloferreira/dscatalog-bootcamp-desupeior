@@ -82,8 +82,13 @@ public class ProductService {
 
         entity.getCategories().clear();
         for (CategoryDTO catDto : dto.getCategories()){
-            Category category = categoryRepository.getOne(catDto.getId());
-            entity.getCategories().add(category);
+            try {
+                Category category = categoryRepository.getOne(catDto.getId());
+                entity.getCategories().add(category);
+            } catch (EntityNotFoundException e) {
+                throw new ResourceEntityNotFoundException("Category id not found "+ catDto.getId());
+            }
+
         }
     }
 }
